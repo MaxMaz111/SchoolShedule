@@ -15,8 +15,7 @@ public class AddSubject extends JDialog {
 
         setContentPane(contentPane);
         setModal(true);
-        pack();
-        setVisible(true);
+
         getRootPane().setDefaultButton(buttonOK);
 
         buttonOK.addActionListener(new ActionListener() {
@@ -57,7 +56,7 @@ public class AddSubject extends JDialog {
             String password = "";
             String url = serverName + baseName;
             Connection connection = DriverManager.getConnection(url, userName, password);
-            String qInsert = "insert into subjects (Name) values ('"+ ss + "')" ;
+            String qInsert = "insert into lessons (Name) values ('"+ ss + "')" ;
             Statement statement = connection.createStatement();
             if(ss.isEmpty()) {
                 System.out.println(1);

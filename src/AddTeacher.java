@@ -13,7 +13,7 @@ public class AddTeacher extends JDialog {
     private JTextField textField2;
     private JTextField textField3;
 
-    public AddTeacher() {
+    public AddTeacher(MyFrame frame) {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -21,7 +21,8 @@ public class AddTeacher extends JDialog {
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onOK();
-
+                frame.setContentPane(new TeacherSubject(frame).getPanel());
+                frame.revalidate();
             }
         });
 
@@ -70,6 +71,7 @@ public class AddTeacher extends JDialog {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         dispose();
     }
 

@@ -54,27 +54,65 @@ public class AddTeacher extends JDialog {
         String ss = textField1.getText();
         String ss2 = textField2.getText();
         String ss3 = textField3.getText();
-        try {
-            String serverName = "jdbc:mysql://localhost/";
-            String baseName = "schoolschedule?serverTimezone=UTC";
-            String userName = "root";
-            String password = "";
-            String url = serverName + baseName;
-            Connection connection = DriverManager.getConnection(url, userName, password);
-            String qInsert = "insert into teachers (Name, Surname, Midname) values ('"+ ss + "', '"+ ss2+"', '" + ss3 + "')" ;
-            Statement statement = connection.createStatement();
-            if(ss.isEmpty() || ss2.isEmpty()) {
-                System.out.println(1);
-            }else{
-                statement.executeUpdate(qInsert);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        String qInsert = "insert into teachers (Name, Surname, Midname) values ('"+ ss + "', '"+ ss2+"', '" + ss3 + "')";
+        if(ss.isEmpty() || ss2.isEmpty()) {
+            System.out.println(1);
+        }else{
+            new MyBase().executeUpdate(qInsert);
         }
-
         dispose();
     }
+    AddTeacher(String str) {
+        System.out.println(str);
+        setContentPane(contentPane);
+        setModal(true);
+        getRootPane().setDefaultButton(buttonOK);
 
+
+        String[] strings = str.split(" ");
+
+        textField1.setText(strings[0]);
+        textField2.setText(strings[1]);
+        if (strings.length == 3){
+            textField3.setText(strings[2]);
+        }else{
+            textField3.setText(null);
+            textField3.setEditable(false);
+        }
+        System.out.println(strings[1]);
+
+        buttonOK.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(strings.length == 3)
+                new MyBase().executeUpdate("UPDATE `teachers` SET `Name` = '"+textField1.getText()+"', `Surname` = '"+textField2.getText()+"', `Midname` = '"+textField3.getText()+"' WHERE `Name` = '"+strings[0]+"' AND `Surname` = '"+strings[1]+"' AND `Midname` = '"+strings[2]+"'");
+                else
+                    new MyBase().executeUpdate("UPDATE `teachers` SET `Name` = '"+textField1.getText()+"', `Surname` = '"+textField2.getText()+"' WHERE `Name` = '"+strings[0]+"' AND `Surname` = '"+strings[1]+"'");
+                dispose();
+            }
+        });
+        buttonCancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onCancel();
+            }
+        });
+
+        // call onCancel() when cross is clicked
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                onCancel();
+            }
+        });
+
+        // call onCancel() on ESCAPE
+        contentPane.registerKeyboardAction(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onCancel();
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        pack();
+        setVisible(true);
+    }
     private void onCancel() {
         // add your code here if necessary
         dispose();

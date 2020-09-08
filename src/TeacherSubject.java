@@ -38,12 +38,13 @@ public class TeacherSubject {
                         ResultSet rs2 = statement.executeQuery("SELECT `id` FROM `lessons` WHERE `Name` = '"+ list1model.get(i) +"'");
                         rs2.first();
                         String qInsert = "insert into lessons_teachers (teahcerId,lessonId) values ("+ t + ", "+ rs2.getString(1) +")";
-
                         statement.executeUpdate(qInsert);
                     }
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
+                frame.setContentPane( new Menu(frame).getPanel());
+                frame.revalidate();
             }
         });
 
@@ -82,11 +83,15 @@ public class TeacherSubject {
 
         });
 
-        mainMenuButton.addActionListener(new ActionListener() {
+        list1.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setContentPane(new Menu(frame).getPanel());
-                frame.revalidate();
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                String t = list1model.getElementAt(list1.getSelectedIndex());
+                list2model.remove(list2.getSelectedIndex());
+                list1model.add(i,t);
+                i++;
+                list1.setModel(list1model);
             }
         });
     }

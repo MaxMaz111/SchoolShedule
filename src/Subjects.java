@@ -9,6 +9,8 @@ public class Subjects {
     private JButton mainMenuButton;
     private JList list1;
     private JPanel contentPane;
+    private JButton editButton;
+    private JButton deleteButton;
 
     public Subjects(MyFrame frame) {
         mainMenuButton.addActionListener(new ActionListener() {
@@ -33,12 +35,23 @@ public class Subjects {
             DefaultListModel<String> subjects = new DefaultListModel();
             do{
                 subjects.addElement(rs.getString("Name"));
-                System.out.println();
             }while(rs.next());
             list1.setModel(subjects);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
+        editButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String str = (String) list1.getModel().getElementAt(list1.getSelectedIndex());
+                System.out.println(str);
+                AddSubject addSubject = new AddSubject(str);
+                frame.setContentPane(new Menu(frame).getPanel());
+                frame.setContentPane(new Subjects(frame).getPanel());
+                frame.revalidate();
+            }
+        });
     }
     public JPanel getPanel() {
         return contentPane;

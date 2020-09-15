@@ -19,8 +19,13 @@ public class MyBase {
             ex.printStackTrace();
         }
     }
-    public ResultSet executeQuery(String query) throws SQLException {
-        return statement.executeQuery(query);
+    public ResultSet executeQuery(String query)  {
+        try {
+            return statement.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     public void executeUpdate(String update){
         try {
@@ -35,5 +40,24 @@ public class MyBase {
         }else{
             return  "WHERE `Name` = '"+FIO[0]+"' AND `Surname` = '"+FIO[1]+"'";
         }
+    }
+    public String[] select(String table, String[] fields, String condition){
+        String fieldNames = "";
+        for (String field:fields){
+            fieldNames += "`" + field + "` ";
+        }
+        ResultSet rs = executeQuery("SELECT" + fieldNames + "FROM" + "'" + table + "' WHERE"+ condition);
+        String temp = "";
+        try {
+            while (rs.next()) {
+                for (int i = 0; i < fields.length; i++) {
+                    if (rs.getString(i) != null)
+                        temp += rs.getString(i) + "#&";
+                }
+            }
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return temp.split("#&");
     }
 }

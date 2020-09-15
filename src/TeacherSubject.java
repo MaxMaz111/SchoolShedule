@@ -49,21 +49,13 @@ public class TeacherSubject {
         });
 
         try {
-            String serverName = "jdbc:mysql://localhost/";
-            String baseName = "schoolschedule?serverTimezone=UTC";
-            String userName = "root";
-            String password = "";
-            String url = serverName + baseName;
-            Connection connection = DriverManager.getConnection(url, userName, password);
-            Statement statement = connection.createStatement(TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet rs = statement.executeQuery("SELECT `Name` FROM `lessons` WHERE 1");
+            ResultSet rs = MyBase.getDB().executeQuery("SELECT `Name` FROM `lessons` WHERE 1");
             String ss = "";
             rs.first();
 
 
             do{
                 list2model.addElement(rs.getString("Name"));
-                System.out.println();
             }while(rs.next());
             list2.setModel(list2model);
         } catch (SQLException throwables) {

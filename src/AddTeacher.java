@@ -58,7 +58,7 @@ public class AddTeacher extends JDialog {
         if(ss.isEmpty() || ss2.isEmpty()) {
             System.out.println(1);
         }else{
-            new MyBase().executeUpdate(qInsert);
+            MyBase.getDB().executeUpdate(qInsert);
         }
         dispose();
     }
@@ -84,9 +84,9 @@ public class AddTeacher extends JDialog {
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(strings.length == 3)
-                new MyBase().executeUpdate("UPDATE `teachers` SET `Name` = '"+textField1.getText()+"', `Surname` = '"+textField2.getText()+"', `Midname` = '"+textField3.getText()+"' WHERE `Name` = '"+strings[0]+"' AND `Surname` = '"+strings[1]+"' AND `Midname` = '"+strings[2]+"'");
+                    MyBase.getDB().executeUpdate("UPDATE `teachers` SET `Name` = '"+textField1.getText()+"', `Surname` = '"+textField2.getText()+"', `Midname` = '"+textField3.getText()+"'" + MyBase.getDB().getWhereQueryForTeacher(strings));
                 else
-                    new MyBase().executeUpdate("UPDATE `teachers` SET `Name` = '"+textField1.getText()+"', `Surname` = '"+textField2.getText()+"' WHERE `Name` = '"+strings[0]+"' AND `Surname` = '"+strings[1]+"'");
+                    MyBase.getDB().executeUpdate("UPDATE `teachers` SET `Name` = '"+textField1.getText()+"', `Surname` = '"+textField2.getText()+"'" + MyBase.getDB().getWhereQueryForTeacher(strings));
                 dispose();
             }
         });
